@@ -1,9 +1,31 @@
-export default function Name({params}:{params:{name:string}}) {
+'use server'
+
+import path from "path";
+
+const paths = [
+    {name:"taro"},
+    {name:"hanako"},
+    {name:"sachi"},
+]
+
+export async function generateStaticParams() {
+    return paths
+}
+export default async function Name({params}:{params:{name:string}}) {
+    const result = paths.some(path=>path.name === params.name)
     return (
         <main>
-            <h1 className="title">Name page</h1>
-            <p className="msg">あなたは「{params.name}」ですね</p>
-            <div><a href="/">go back!</a></div>
+            {result ?
+            <>
+                <h1 className="title">&quot;{params.name}&quot;</h1>
+                <p className="msg">{params.name}さんこんにちは!</p>
+            </>
+            :
+            <>
+                <h1 className="title">&quot;{params.name}&quot;</h1>
+                <p className="msg">{params.name}は使えません</p>
+            </>
+            }
         </main>
     );
 }
