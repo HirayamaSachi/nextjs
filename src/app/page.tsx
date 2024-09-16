@@ -1,34 +1,18 @@
-'use client'
+'use server'
 
-import {useState} from 'react'
+import { serverAction} from './server-action'
 
-const url = 'http://localhost:3000/sample.json'
-
-async function getSampleData() {
-  const resp = await fetch(
-    url,
-    {cache: 'no-store'}
-  )
-  const result = resp.json()
-  return result
-}
-
-export default function Home() {
-  const [msg, setMsg] = useState("dummy message")
-  const doAction = () =>{
-    getSampleData().then(resp => {
-      setMsg(resp.message)
-    })
-  }
-
+export default async function Home() {
   return (
     <main>
-      <h1 className="title">Index page</h1>
-      <p className="msg">{msg}</p>
-      <div className="form">
-        <button className="btn" onClick={doAction}>Click</button>
+      <h1 className="title">index page</h1>
+      <p className="msg">メッセージを送信</p>
+      <div>
+        <form className="form" action={serverAction}>
+            <input className="input" type="text" name="input" />
+          <button className="btn">click</button>
+        </form>
       </div>
-
     </main>
   )
 }
