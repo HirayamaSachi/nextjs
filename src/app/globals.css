@@ -60,3 +60,13 @@ ul,ol {
 li {
   @apply mx-10 font-normal text-blue-700;
 }
+table {
+  @apply m-5;
+}
+table tr th {
+  @apply border-solid border-2 bg-blue-100 px-10;
+}
+
+table tr td {
+  @apply border-solid border-2 p-2;
+}
