@@ -1,7 +1,5 @@
 'use server'
 
-import path from "path";
-
 const paths = [
     {name:"taro"},
     {name:"hanako"},
