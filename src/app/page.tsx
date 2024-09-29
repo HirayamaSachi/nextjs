@@ -3,7 +3,7 @@
 import useSWR from 'swr'
 
 const url = '/rh'
-const fetcher = (...args) => fetch(...args).then(res=>res.json())
+const fetcher = (url: string) => fetch(url).then(res=>res.json())
 export default function Home() {
   const {data,error,isLoading} = useSWR(url,fetcher)
   return (
