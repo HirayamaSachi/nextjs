@@ -4,7 +4,7 @@ import fs from 'fs'
 
 const fname = './data.txt'
 
-export async function serverAction(form) {
+export async function serverAction(form: FormData) {
     const input = form.get('input')
     fs.appendFileSync(fname, input + '\n')
     redirect('/other')
