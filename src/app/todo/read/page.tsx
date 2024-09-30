@@ -1,17 +1,32 @@
-import { readTodo } from '../../server-action'
+'use client'
+import { useEffect, useState } from 'react';
+import useSWR from 'swr'
 
-export default async function Todo()  {
-    // todo:読み込み
-    const {rows} = await readTodo()
-    if (!rows) {
-        return <div>No todos available</div>; // エラーハンドリング
-    }
+
+export default function Todo()  {
+    const [todos, setTodos] = useState([])
+    useEffect(()=>{
+        const fetchTodos = async () => {
+            try {
+                const res = await fetch('/todos.js')
+                console.log(res)
+                // const data = await res.json()
+                // setTodos(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchTodos()
+    }, [])
 
     return (
         <div>
             {
-                rows.map((row) => 
-                    <p>{row.finished ? '[x]': '[ ]'}:{row.name}</p>
+                todos.map((todo) => 
+                <div key={todo.id}>
+                    <input type="checkbox" name="finished" id={todo.id} defaultChecked={todo.finished ? true : false}/>
+                    <label>{todo.name}</label>
+                </div>
                 )
             }
         </div>
