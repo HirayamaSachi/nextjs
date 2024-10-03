@@ -1,11 +1,20 @@
+import { getTodoById } from '../../../server-action'
 interface Params{
-    id: int
+    id: number
 }
 
-export default function Id({params}: {params:Params}) {
+export default async function Id({params}: {params:Params}) {
+    const todoArray = await getTodoById(params.id)
+    const todo = todoArray[0]
+
+    
+    
     return (
-        <main>
-            <p>{params.id}</p>
-        </main>
+            <main>
+                <p>{todo.id}</p>
+                <p>{todo.name}</p>
+                <p>{todo.finished ? '完了' : '未完了'}</p>
+            </main>
+            
     ) 
 }

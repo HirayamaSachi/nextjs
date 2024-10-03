@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import fs from 'fs'
 import { sql } from '@vercel/postgres'
 import { z } from 'zod'
+import internal from 'stream'
 
 
 const fname = './data.txt'
@@ -33,12 +34,19 @@ export async function createTodo (form: FormData) {
 
 export async function readTodo () {
     // todo:paginatorつける
-    return await sql`SELECT * FROM todo`
+    const data = await sql`SELECT * FROM todo`
+    return data.rows
+
+}
+
+export async function getTodoById (id: internal) {
+    const data = await sql`SELECT * FROM todo WHERE id = ${id}`
+    return data.rows
 }
 
 // todo:updateをつける
 export async function updateTodo (form:FormData) {
-
+    sql`UPDATE todo SET name = ${form.name}, finished = ${form.finished} WHERE id = ${form.id}`
 }
 
 
