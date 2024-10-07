@@ -4,6 +4,7 @@ import fs from 'fs'
 import { sql } from '@vercel/postgres'
 import { z } from 'zod'
 import internal from 'stream'
+import { revalidatePath } from '../../node_modules/next/cache'
 
 
 const fname = './data.txt'
@@ -44,9 +45,16 @@ export async function getTodoById (id: internal) {
     return data.rows
 }
 
+
 // todo:updateをつける
 export async function updateTodo (form:FormData) {
-    sql`UPDATE todo SET name = ${form.name}, finished = ${form.finished} WHERE id = ${form.id}`
+    const finished = form.get('finished') ?? false
+    await sql`UPDATE todo SET name = ${form.get('name')}, finished = ${finished} WHERE id = ${form.get('id')}`
+    revalidatePath(`/todo/detail/${form.get('id')}`)
+    redirect(`/todo/detail/${form.get('id')}`)
+    // 更新後にデータが変更されない
+    // DBには変更がされている
+    // フロント側でfinishedがcheckedにならない
 }
 
 

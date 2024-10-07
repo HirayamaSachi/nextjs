@@ -1,19 +1,22 @@
-import { getTodoById } from '../../../server-action'
+import { getTodoById, updateTodo } from '../../../server-action'
 interface Params{
     id: number
 }
+
 
 export default async function Id({params}: {params:Params}) {
     const todoArray = await getTodoById(params.id)
     const todo = todoArray[0]
 
-    
-    
     return (
             <main>
-                <p>{todo.id}</p>
-                <p>{todo.name}</p>
-                <p>{todo.finished ? '完了' : '未完了'}</p>
+                <form className='form' action={updateTodo}>
+                    <input type="hidden" name="id" value={todo.id} />
+                    <input className='input' type="text" name="name" defaultValue={todo.name}/>
+                    <label htmlFor="finished">finished</label>
+                    <input type="checkbox" name="finished" defaultChecked={todo.finished}/>
+                    <button className="btn">update</button>
+                </form>
             </main>
             
     ) 
