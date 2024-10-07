@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation'
 import fs from 'fs'
 import { sql } from '@vercel/postgres'
 import { z } from 'zod'
-import internal from 'stream'
 import { revalidatePath } from '../../node_modules/next/cache'
 
 
@@ -20,12 +19,14 @@ export async function readData() {
 }
 
 const TodoFormSchema = z.object({
-    name: z.string()
+    id: z.string(),
+    name: z.string(),
+    finished: z.boolean()
 })
 
-
+const CreateTodo = TodoFormSchema.pick({name: true})
 export async function createTodo (form: FormData) {
-    const { name } = TodoFormSchema.parse({
+    const { name } = CreateTodo.parse({
         name: form.get('name')
     })
     const finished = 0
@@ -47,11 +48,13 @@ export async function getTodoById (id: string) {
 }
 
 
-// todo:updateをつける
 export async function updateTodo (form:FormData) {
-    const finished = form.get('finished') ?? false
-    const name = form.get('name')
-    const id = form.get('id')
+    const UpdateTodo = TodoFormSchema.pick({id:true, name:true, finished:true})
+    const {id, name, finished} = UpdateTodo.parse({
+        id: form.get('id'),
+        name: form.get('name'),
+        finished: form.get('finished') ? true : false
+    })
     await sql`UPDATE todo SET name = ${name}, finished = ${finished} WHERE id = ${id}`
     revalidatePath(`/todo/detail/${form.get('id')}`)
     redirect(`/todo/detail/${form.get('id')}`)

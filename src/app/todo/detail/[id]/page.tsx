@@ -1,6 +1,6 @@
 import { getTodoById, updateTodo } from '../../../server-action'
 interface Params{
-    id: number
+    id: string
 }
 
 
