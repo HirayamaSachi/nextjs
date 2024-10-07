@@ -52,9 +52,6 @@ export async function updateTodo (form:FormData) {
     await sql`UPDATE todo SET name = ${form.get('name')}, finished = ${finished} WHERE id = ${form.get('id')}`
     revalidatePath(`/todo/detail/${form.get('id')}`)
     redirect(`/todo/detail/${form.get('id')}`)
-    // 更新後にデータが変更されない
-    // DBには変更がされている
-    // フロント側でfinishedがcheckedにならない
 }
 
 
