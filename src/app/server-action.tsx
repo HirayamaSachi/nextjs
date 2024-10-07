@@ -40,8 +40,9 @@ export async function readTodo () {
 
 }
 
-export async function getTodoById (id: internal) {
-    const data = await sql`SELECT * FROM todo WHERE id = ${id}`
+export async function getTodoById (id: string) {
+    const todoId = id
+    const data = await sql`SELECT * FROM todo WHERE id = ${todoId}`
     return data.rows
 }
 
@@ -49,7 +50,9 @@ export async function getTodoById (id: internal) {
 // todo:updateをつける
 export async function updateTodo (form:FormData) {
     const finished = form.get('finished') ?? false
-    await sql`UPDATE todo SET name = ${form.get('name')}, finished = ${finished} WHERE id = ${form.get('id')}`
+    const name = form.get('name')
+    const id = form.get('id')
+    await sql`UPDATE todo SET name = ${name}, finished = ${finished} WHERE id = ${id}`
     revalidatePath(`/todo/detail/${form.get('id')}`)
     redirect(`/todo/detail/${form.get('id')}`)
 }
