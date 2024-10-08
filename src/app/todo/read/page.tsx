@@ -4,7 +4,7 @@ import { readTodo } from '@/app/server-action'
 import { QueryResultRow } from '../../../../node_modules/@vercel/postgres/dist/index.cjs'
 
 export default function Todo()  {
-    const [todos, setTodos] = useState([])
+    const [todos, setTodos] = useState<QueryResultRow[]>([])
     const [loading, setLoading] = useState(true)
     useEffect(()=>{
         readTodo().then(res => setTodos(res))
