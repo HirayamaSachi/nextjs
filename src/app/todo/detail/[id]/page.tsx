@@ -13,15 +13,15 @@ type Todo = {
 export default async function Id({params}: {params:Params}) {
     const todoArray: QueryResultRow[] = await getTodoById(params.id)
     const todo: Todo = {
-        id: todoArray[0].id,
-        name: todoArray[0].name,
-        finished: todoArray[0].finished,
+        id: todoArray.length === 0 ? null : todoArray[0].id,
+        name: todoArray.length === 0 ? null : todoArray[0].name,
+        finished: todoArray.length === 0 ? null : todoArray[0].finished,
     }
 
     return (
             <main>
                 {
-                    (todo.length === 0) ?
+                    (todoArray.length === 0) ?
                     '不正なidです' : 
                     <div className="flex">
                     <form className='form' action={updateTodo}>
