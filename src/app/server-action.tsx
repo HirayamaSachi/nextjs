@@ -1,7 +1,7 @@
 "use server"
 import { redirect } from 'next/navigation'
 import fs from 'fs'
-import { sql, Row } from '@vercel/postgres'
+import { sql } from '@vercel/postgres'
 import { z } from 'zod'
 import { revalidatePath } from '../../node_modules/next/cache'
 
@@ -41,7 +41,7 @@ export async function readTodo () {
 
 }
 
-export async function getTodoById (id: string): Promise<Row[]> {
+export async function getTodoById (id: string) {
     const todoId = id
     const data = await sql`SELECT * FROM todo WHERE id = ${todoId}`
     return data.rows

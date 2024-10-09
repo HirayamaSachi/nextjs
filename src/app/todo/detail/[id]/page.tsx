@@ -11,7 +11,7 @@ type Todo = {
 }
 
 export default async function Id({params}: {params:Params}) {
-    const todoArray: Array<QueryResultRow[]> = await getTodoById(params.id)
+    const todoArray: QueryResultRow[] = await getTodoById(params.id)
     const todo: Todo = {
         id: todoArray[0].id,
         name: todoArray[0].name,
