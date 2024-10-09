@@ -60,4 +60,13 @@ export async function updateTodo (form:FormData) {
     redirect(`/todo/detail/${form.get('id')}`)
 }
 
+export async function deleteTodo (form: FormData) {
+    const DeleteTodo = TodoFormSchema.pick({id:true})
+    const {id} = DeleteTodo.parse({
+        id: form.get('id')
+    })
+    await sql`DELETE FROM todo WHERE id = ${id}`
+    revalidatePath(`/todo/detail/${id}`)
+    redirect('/todo/read')
+}
 

@@ -46,6 +46,9 @@ img {
 .btn {
   @apply px-7 py-2 mx-2 bg-blue-800 text-white rounded-lg;
 }
+.deleteBtn {
+  @apply px-7 py-2 mx-2 bg-red-800 text-white rounded-lg;
+}
 h1.title {
   @apply text-2xl font-bold m-0 p-5 text-white bg-blue-800 text-center;
 }
