@@ -4,10 +4,15 @@ interface Params{
     id: string
 }
 
+type Todo = {
+    id: number,
+    name: string,
+    finished: boolean
+}
 
 export default async function Id({params}: {params:Params}) {
-    const todoArray = await getTodoById(params.id)
-    const todo: QueryResult<any> = todoArray.length === 0 ? [] : [todoArray[0]]
+    const todoArray: QueryResultRow[] = await getTodoById(params.id)
+    const todo: Todo = todoArray[0]
 
     return (
             <main>
