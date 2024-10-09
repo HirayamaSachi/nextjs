@@ -1,4 +1,4 @@
-import { QueryResult } from '../../../../../node_modules/@vercel/postgres/dist/index.cjs'
+import { Row } from '@vercel/postgres'
 import { getTodoById, updateTodo, deleteTodo} from '../../../server-action'
 interface Params{
     id: string
@@ -11,8 +11,12 @@ type Todo = {
 }
 
 export default async function Id({params}: {params:Params}) {
-    const todoArray: QueryResultRow[] = await getTodoById(params.id)
-    const todo: Todo = todoArray[0]
+    const todoArray: Row[] = await getTodoById(params.id)
+    const todo: Todo = {
+        id: todoArray[0].id,
+        name: todoArray[0].name,
+        finished: todoArray[0].finished,
+    }
 
     return (
             <main>
