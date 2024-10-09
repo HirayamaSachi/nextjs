@@ -1,3 +1,4 @@
+import { QueryResult } from '../../../../../node_modules/@vercel/postgres/dist/index.cjs'
 import { getTodoById, updateTodo, deleteTodo} from '../../../server-action'
 interface Params{
     id: string
@@ -6,7 +7,7 @@ interface Params{
 
 export default async function Id({params}: {params:Params}) {
     const todoArray = await getTodoById(params.id)
-    const todo = todoArray.length === 0 ? [] : todoArray[0]
+    const todo: QueryResult<any> = todoArray.length === 0 ? [] : [todoArray[0]]
 
     return (
             <main>
