@@ -35,10 +35,8 @@ export async function createTodo (form: FormData) {
 }
 
 export async function readTodo (page? : number) {
-    // todo:paginatorつける
     const offset = (page && page > 0) ? (page - 1) * 5 : 0
     const data = await sql`SELECT * FROM todo LIMIT 5 OFFSET ${offset}`
-    // const data = await sql`SELECT * FROM todo`
     return data.rows
 
 }
