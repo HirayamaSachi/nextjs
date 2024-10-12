@@ -26,7 +26,7 @@ export default async function Id({params}: {params:Params}) {
                     <div className="flex">
                     <form className='form' action={updateTodo}>
                         <input type="hidden" name="id" value={todo.id} />
-                        <input className='input' type="text" name="name" defaultValue={todo.name}/>
+                        <input className='input' type="text" name="name" defaultValue={todo.name.trim()}/>
                         <label htmlFor="finished">finished</label>
                         <input type="checkbox" name="finished" defaultChecked={todo.finished}/>
                         <button className="btn">update</button>
