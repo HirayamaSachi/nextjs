@@ -21,7 +21,8 @@ export default function Todo()  {
         replace(`${pathName}?${params.toString()}`)
     }
     useEffect(()=>{
-        readTodo(searchParams.get('query')).then(res => setTodos(res))
+        const page:number = searchParams.get('query') ? Number(searchParams.get('query')) : 0
+        readTodo(page).then(res => setTodos(res))
         setLoading(false)
     }, [])
 
