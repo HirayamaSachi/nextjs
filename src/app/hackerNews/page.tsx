@@ -15,9 +15,20 @@ export default function App() {
     }
     if(Array.isArray(newsData)) return (
         <div>
-            <h1>{newsData.map((item, key) => (
-                <p key={key}>{item.title}</p>
-            ))}</h1>
+            {newsData.map((item, key) => {
+                const dateTime = new Date(item.time * 1000)
+                const commentCnt = Array.isArray(item.kids) ? item.kids.length : 0
+                return (
+                    <div className='p-1' key={key}>
+                        <h1>{item.title}</h1>
+                        <div className='flex'>
+                            <p className='p-0.5'>By {item.by}</p>
+                            <p className='p-0.5'>{dateTime.toLocaleDateString()}</p>
+                            <p className='p-0.5'>{commentCnt} comments</p>
+                        </div>
+                    </div>
+                )
+            })}
         </div>
     )
 }
