@@ -1,8 +1,6 @@
 import { getTodoById, updateTodo, deleteTodo} from '../../../server-action'
 import { QueryResultRow } from '../../../../../node_modules/@vercel/postgres/dist/index.cjs'
-interface Params{
-    id: string
-}
+type Params = Promise<{id:string}>
 
 type Todo = {
     id: number,
@@ -11,7 +9,8 @@ type Todo = {
 }
 
 export default async function Id({params}: {params:Params}) {
-    const todoArray: QueryResultRow[] = await getTodoById(params.id)
+    const { id } = await params
+    const todoArray: QueryResultRow[] = await getTodoById(id)
     const todo: Todo = {
         id: todoArray.length === 0 ? null : todoArray[0].id,
         name: todoArray.length === 0 ? null : todoArray[0].name,
