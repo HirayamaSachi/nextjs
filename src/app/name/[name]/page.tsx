@@ -9,23 +9,19 @@ const paths = [
 export async function generateStaticParams() {
     return paths
 }
-// https://nextjs.org/docs/app/building-your-application/upgrading/version-15#params--searchparams
-type Params = Promise<{name:string}>
-export default async function Name({params}:{params: Params}) {
-    const { name } = await params
-    console.log(params)
-    const result = paths.some(path=>path.name === name)
+export default async function Name({params}:{params:{name:string}}) {
+    const result = paths.some(path=>path.name === params.name)
     return (
         <main>
             {result ?
             <>
-                <h1 className="title">&quot;{name}&quot;</h1>
-                <p className="msg">{name}さんこんにちは!</p>
+                <h1 className="title">&quot;{params.name}&quot;</h1>
+                <p className="msg">{params.name}さんこんにちは!</p>
             </>
             :
             <>
-                <h1 className="title">&quot;{name}&quot;</h1>
-                <p className="msg">{name}は使えません</p>
+                <h1 className="title">&quot;{params.name}&quot;</h1>
+                <p className="msg">{params.name}は使えません</p>
             </>
             }
         </main>
