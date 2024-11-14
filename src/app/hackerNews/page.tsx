@@ -10,7 +10,7 @@ export default function App() {
             <div className='flex'>
                 
             </div>
-            <Suspense>
+            <Suspense fallback={<p>loading...</p>}>
                 <TopNewsDetail />
             </Suspense>
         </div>
