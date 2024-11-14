@@ -1,5 +1,5 @@
 'use client'
-import {TopNewsDetail} from './api/dataFetcher'
+import {TopNewsDetail} from './api/TopNewsDetail'
 import { Suspense} from 'react'
 
 

@@ -1,17 +1,6 @@
 'use client'
+import { allFetcher, fetcher, BASE_API_URL} from './data_fetcher'
 import useSWR from 'swr'
-
-const BASE_API_URL = 'https://hacker-news.firebaseio.com/v0/'
-function allFetcher(...urls: string[][]) {
-    const f = (url: string) => fetch(url).then(r => r.json())
-    if (!Array.isArray(urls)) return undefined
-    return Promise.all(urls[0].map(f))
-}
-
-function fetcher(...urls: [string]) {
-    return fetch(...urls).then(res => res.json())
-}
-
 export function TopNewsDetail() {
     // apiの取得
     const { data: newsIds, error: idsError, isLoading: idsIsLoading } = useSWR(BASE_API_URL + 'topstories.json?print=pretty', fetcher)
