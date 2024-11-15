@@ -1,13 +1,11 @@
-'use client'
-import {LatestNewsDetail} from '../api/LatestNewsDetail'
-import { Suspense} from 'react'
+import { Suspense } from 'react'
+import { BestNewsDetail } from '../api/BestNewsDetail'
 import Link from 'next/link'
-
-export default function NewStories() {
+export default function BestStories() {
     return (
         <div>
             <Suspense fallback={<p>loading...</p>}>
-                <LatestNewsDetail />
+                <BestNewsDetail />
             </Suspense>
             <Link href="/hackerNews">Topに戻る</Link>
         </div>
