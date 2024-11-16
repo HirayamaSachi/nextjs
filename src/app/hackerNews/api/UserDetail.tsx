@@ -14,7 +14,6 @@ export function UserDetail(props: Props) {
     if (!data) {
         return <div>newsData loading...</div>
     }
-    console.log(data.about)
     const dateTime = new Date(data.created * 1000)
     return (
         <div>

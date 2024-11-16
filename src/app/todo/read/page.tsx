@@ -8,7 +8,6 @@ import SearchBar from './searchBar'
 
 export default function Todo({searchParams} : {searchParams? : { query?: string}})  {
     const [todos, setTodos] = useState<QueryResultRow[]>([])
-    console.log(searchParams)
     const [loading, setLoading] = useState(true)
     useEffect(()=>{
         const page = searchParams ? Number(searchParams?.query) : 0
