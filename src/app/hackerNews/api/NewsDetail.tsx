@@ -25,10 +25,12 @@ export function NewsDetail(props : Props) {
                 const commentCnt = Array.isArray(item.kids) ? item.kids.length : 0
                 return (
                     <div className='p-1' key={key}>
-                        <h1>{item.title}</h1>
+                        <h1><a href={item.url}>{item.title}</a></h1>
                         <div className='flex'>
-                            <p className='p-0.5'>By {item.by}</p>
+                            <p className='p-0.5'><a href={`/hackerNews/user/${item.by}`}>By {item.by}</a></p>
+                            <p className='p-0.5'>/</p>
                             <p className='p-0.5'>{dateTime.toLocaleDateString()}</p>
+                            <p className='p-0.5'>/</p>
                             <p className='p-0.5'>{commentCnt} comments</p>
                         </div>
                     </div>
