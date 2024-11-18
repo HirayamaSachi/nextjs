@@ -1,6 +1,7 @@
 'use client'
 import { allFetcher, BASE_API_URL } from "./data_fetcher"
 import useSWR from 'swr'
+import DOMPurify from "dompurify";
 
 interface Props {
     ids: Array<number>
@@ -19,10 +20,11 @@ export function CommentDetail(props: Props) {
     return (
         data.map((item,key) => {
             const dateTime = new Date(item.time * 1000)
+            const safeHTML = DOMPurify.sanitize(item.text)
             return (
                 <div key={key}>
                     <div className="p-1">
-                        <p className="p-0.5 font-bold">{item.text}</p>
+                        <p className="p-0.5 font-bold" dangerouslySetInnerHTML={{__html: safeHTML}} />
                         <div className="flex">
                             <p className="p-0.5">{item.by}</p>
                             <p className="p-0.5">/</p>
