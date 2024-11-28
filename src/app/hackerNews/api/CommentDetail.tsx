@@ -14,7 +14,7 @@ export function CommentDetail(props: Props) {
     if (error) return <div>failed to load</div>
     if (isLoading) return <div>loading...</div>
     if (!data) {
-        return <div>newsData loading...</div>
+        return <div>comment loading...</div>
     }
     if (!Array.isArray(data)) return <div>failed to load</div>
     return (
