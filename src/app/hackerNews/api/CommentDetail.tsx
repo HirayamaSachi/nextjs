@@ -23,7 +23,7 @@ export function CommentDetail(props: Props) {
             const safeHTML = DOMPurify.sanitize(item.text)
             return (
                 <div key={key}>
-                    <div className="p-1">
+                    <div className="p-1 text-xs">
                         <p className="p-0.5 font-bold" dangerouslySetInnerHTML={{__html: safeHTML}} />
                         <div className="flex">
                             <p className="p-0.5">{item.by}</p>

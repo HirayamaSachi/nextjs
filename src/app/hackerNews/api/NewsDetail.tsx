@@ -49,7 +49,7 @@ export function NewsDetail(props : Props) {
                             <p className='p-0.5'>{commentCnt} comments</p>
                             <button onClick={() => toggleItem(key)}>+ comment</button>
                         </div>
-                        {latestOpenIds.includes(key) && (<div className='p-1'><CommentDetail ids={item.kids ? item.kids : []} /></div>)}
+                        {latestOpenIds.includes(key) && (<div className='p-3'><CommentDetail ids={item.kids ? item.kids : []} /></div>)}
                     </div>
                 )
             })}
