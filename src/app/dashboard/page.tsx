@@ -1,7 +1,10 @@
+export const dynamic = 'force-dynamic'
 import { sql } from "../../../node_modules/@vercel/postgres/dist/index.cjs"
-export default async function Index() {
-    const data = await sql`SELECT * FROM users`
-    const { rows: users } = data
+import { QueryResultRow } from "../../../node_modules/@vercel/postgres/dist/index.cjs"
+
+export default async function Page() {
+    const data = await sql`SELECT * FROM users;`
+    const { rows: users }: {rows: QueryResultRow[]} = data
     return (
         <main>
             <p>user一覧</p>
