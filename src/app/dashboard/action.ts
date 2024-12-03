@@ -1,4 +1,5 @@
 'use server'
+import { redirect } from 'next/navigation'
 import { sql } from "@vercel/postgres"
 import { revalidatePath } from "next/cache";
 import { z } from "zod"
@@ -21,10 +22,10 @@ export async function createUser(prevState: {message: string}, formData: FormDat
     try {
         await sql`INSERT INTO users (name, email, password) VALUES (${data.name}, ${data.email}, ${data.password})`;
 
-        revalidatePath("dashboard/users")
-        return { message: `success`};
     } catch (e){
         throw new Error( `br>Failed to create User: ${e}` )
-
     }
+    revalidatePath('/dashboard')
+    redirect('/dashboard')
+
 }
