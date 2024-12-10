@@ -2,10 +2,11 @@ export const dynamic = 'force-dynamic'
 import Link from "../../../../../node_modules/next/link.js"
 import { sql } from "../../../../../node_modules/@vercel/postgres/dist/index.cjs"
 import { QueryResultRow } from "../../../../../node_modules/@vercel/postgres/dist/index.cjs"
-export default async function Detail({params, }: {params: Promise<{ user : string}>}) {
+export default async function Detail({ params, }: { params: Promise<{ user: string }> }) {
     const data = await sql`SELECT * FROM users WHERE id = ${(await params).user}`
-    const [UserRow]: QueryResultRow[] = data.rows
-    if(!UserRow) return <main><p>404 NOT FOUND</p></main>
+    const { rows: user }: { rows: QueryResultRow[] } = data
+    const UserRow = user[0]
+    if (!UserRow) return <main><p>404 NOT FOUND</p></main>
     return (
         <main>
             <p>user詳細</p>

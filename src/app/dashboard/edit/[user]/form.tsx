@@ -8,15 +8,7 @@ const initialState = {
     password: ""
 }
 
-type User = {
-    user: {
-        id: Number,
-        name: string,
-        email: string,
-        password: string,
-    }
-}
-export default function UserForm(props: User) {
+export default function UserForm(props: { user : QueryResultRow}) {
     const [state, formAction] = useFormState(editUser, initialState)
     return (
         <div className='p-10'>
