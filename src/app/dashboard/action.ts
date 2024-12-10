@@ -38,3 +38,29 @@ export async function createUser(prevState: FormState, formData: FormData) {
     revalidatePath('/dashboard')
     redirect('/dashboard')
 }
+
+type EditFormState = {
+    id?: number,
+    name?: string,
+    email?: string,
+    password?: string,
+}
+export async function editUser(prevState: FormState, formData: FormData) {
+    const rawFormData : EditFormState = Object.fromEntries(formData);
+    
+    try {
+        await sql`UPDATE users SET name = ${rawFormData.name}, email = ${rawFormData.email}, password = ${rawFormData.password} WHERE id = ${rawFormData.id}`
+    } catch (e) {
+        throw new Error(`Failed to update User: ${e}`);
+    }
+    revalidatePath('/dashboard')
+    revalidatePath(`/dashboard/user/${rawFormData.id}`)
+    revalidatePath(`/dashboard/edit/${rawFormData.id}`)
+    redirect('/dashboard')
+    return {
+        name: "",
+        email: "",
+        password: ""
+    }
+
+}
