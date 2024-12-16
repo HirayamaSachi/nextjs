@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { sql } from "@vercel/postgres"
 import { revalidatePath } from "next/cache";
 import { z } from "zod"
+import { signIn } from '../../../auth';
 export type FormState = {
     name?: string,
     email?: string,
@@ -82,4 +83,13 @@ export async function editUser(prevState: FormState, formData: FormData) {
         password: ""
     }
 
+}
+
+export async function authenticate(prevState: string | undefined, formData:FormData)
+{
+    try {
+        await signIn('credentials', formData)
+    } catch (error) {
+        
+    }
 }
