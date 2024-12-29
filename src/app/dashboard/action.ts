@@ -88,7 +88,7 @@ export async function editUser(prevState: FormState, formData: FormData) {
 export async function authenticate(prevState: string | undefined, formData:FormData)
 {
     try {
-        await signIn('credentials', formData)
+        await signIn('credentials')
     } catch (error) {
         
     }
