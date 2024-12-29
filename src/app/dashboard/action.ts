@@ -85,11 +85,19 @@ export async function editUser(prevState: FormState, formData: FormData) {
 
 }
 
-export async function authenticate(prevState: string | undefined, formData:FormData)
+export type LoginFormState = {
+    email?: string,
+    password?: string,
+}
+export async function authenticate(prevState: LoginFormState, formData:FormData)
 {
     try {
         await signIn('credentials')
     } catch (error) {
         
+    }
+    return {
+        email: "",
+        password: ""
     }
 }

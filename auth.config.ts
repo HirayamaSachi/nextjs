@@ -1,23 +1,16 @@
 import { signIn } from "./auth";
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, Session, User } from "next-auth";
+import { NextRequest, NextResponse } from "./node_modules/next/server";
 export const authConfig: NextAuthConfig = {
     pages: {
         signIn: '/dashboard/login'
     },
     callbacks: {
-        authorized({auth, request: {nextUrl}}) {
-            console.log("this is auth.config.ts")
+        authorized({auth, request}:{auth:Session | null , request:NextRequest}) {
             const isLoggedIn = !!auth?.user
-            const isOnDashBoard = nextUrl.pathname.startsWith('/dashboard')
-            if(nextUrl.pathname == "dashboard/login" && isLoggedIn) {
-                console.log('aa')
-                return Response.redirect(new URL('/dashboard', nextUrl))
-            }
-            if(isOnDashBoard) {
-                if(isLoggedIn)return true
-                return false
-            } else if (isLoggedIn) {
-                return { redirect: { destination: '/dashboard', permanent: false } }
+            const isOnDashBoard = request.nextUrl.pathname.startsWith('/dashboard')
+            if (request.nextUrl.pathname == "dashboard/login" && isLoggedIn) {
+                return NextResponse.redirect(new URL('/dashboard', request.nextUrl))
             }
             return true
         }

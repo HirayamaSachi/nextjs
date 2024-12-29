@@ -11,7 +11,7 @@ export const { auth, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [
         Credentials({
-            async authorize(credentials) {
+            async authorize({}) {
                 const email = 'hirayama@gmail.com'
                 const Users = await getUser(email)
                 if (!Users) return null
