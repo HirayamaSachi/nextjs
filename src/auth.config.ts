@@ -1,6 +1,6 @@
-import { signIn } from "./auth";
 // import type { NextAuthConfig, Session, User } from "./next-auth";
 import type { NextAuthConfig, Session } from "../node_modules/next-auth/index";
+import { redirect } from "../node_modules/next/navigation";
 import { NextRequest, NextResponse } from "../node_modules/next/server";
 export const authConfig: NextAuthConfig = {
     pages: {
@@ -12,13 +12,11 @@ export const authConfig: NextAuthConfig = {
             if (request.nextUrl.pathname == "/dashboard/login" && isLoggedIn) {
                 return NextResponse.redirect(new URL('/dashboard', request.nextUrl))
             }
-            const isOnDashBoard = request.nextUrl.pathname.startsWith('/dashboard')
-            if(isOnDashBoard) {
+            if(request.nextUrl.pathname == "/dashboard") {
                 if(isLoggedIn) {
                     return true
                 } else {
-                    // todo:ログインさせる
-                    // return NextResponse.redirect(new URL('/dashboard/login', request.nextUrl))
+                    return NextResponse.redirect(new URL('/dashboard/login', request.nextUrl))
                 }
             }
             return true
