@@ -9,6 +9,7 @@ export type FormState = {
     email?: string,
     password?: string,
 }
+import { signOut } from "@/auth";
 
 export async function createUser(prevState: FormState, formData: FormData) {
     const schema = z.object({
@@ -100,4 +101,8 @@ export async function authenticate(prevState: LoginFormState, formData:FormData)
         email: "",
         password: ""
     }
+}
+
+export async function logout() {
+    await signOut({redirectTo:"/dashboard/login"});
 }
