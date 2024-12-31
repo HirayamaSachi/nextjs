@@ -92,15 +92,7 @@ export type LoginFormState = {
 }
 export async function authenticate(prevState: LoginFormState, formData:FormData)
 {
-    try {
-        await signIn('credentials')
-    } catch (error) {
-        
-    }
-    return {
-        email: "",
-        password: ""
-    }
+    await signIn('credentials', {callbackUrl: "/dashboard"})
 }
 
 export async function logout() {
