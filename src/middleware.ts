@@ -1,4 +1,4 @@
-import NextAuth from './node_modules/next-auth/index';
+import NextAuth from '../node_modules/next-auth/index';
 import { authConfig } from './auth.config';
 
 export default NextAuth(authConfig).auth;
