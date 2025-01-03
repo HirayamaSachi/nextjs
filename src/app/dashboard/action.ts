@@ -1,9 +1,10 @@
 'use server'
 import { redirect } from 'next/navigation'
 import { sql } from "@vercel/postgres"
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache"
 import { z } from "zod"
-import { signIn } from '@/auth';
+import { signIn } from '@/auth'
+import bcrypt from "bcrypt"
 export type FormState = {
     name?: string,
     email?: string,
@@ -32,7 +33,9 @@ export async function createUser(prevState: FormState, formData: FormData) {
     }
     const data = parse.data;
     try {
-        await sql`INSERT INTO users (name, email, password) VALUES (${data.name}, ${data.email}, ${data.password})`;
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(data.password, salt)
+        await sql`INSERT INTO users (name, email, password, salt) VALUES (${data.name}, ${data.email}, ${hash}, ${salt})`;
 
     } catch (e) {
         throw new Error(`br>Failed to create User: ${e}`)
@@ -86,13 +89,9 @@ export async function editUser(prevState: FormState, formData: FormData) {
 
 }
 
-export type LoginFormState = {
-    email?: string,
-    password?: string,
-}
-export async function authenticate(prevState: LoginFormState, formData:FormData)
+export async function authenticate(_prevState: void | undefined, formData: FormData)
 {
-    await signIn('credentials', {callbackUrl: "/dashboard"})
+    await signIn('credentials', {email:formData.get('email'), password: formData.get('password'), callbackUrl: "/dashboard"})
 }
 
 export async function logout() {
