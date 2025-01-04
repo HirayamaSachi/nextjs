@@ -73,7 +73,9 @@ export async function editUser(prevState: FormState, formData: FormData) {
     }
     const data = result.data;
     try {
-        await sql`UPDATE users SET name = ${data.name}, email = ${data.email}, password = ${data.password} WHERE id = ${rawFormData.id}`
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(data.password, salt)
+        await sql`UPDATE users SET name = ${data.name}, email = ${data.email}, password = ${hash}, salt = ${salt}  WHERE id = ${rawFormData.id}`
     } catch (e) {
         throw new Error(`Failed to update User: ${e}`);
     }
