@@ -99,3 +99,10 @@ export async function authenticate(_prevState: void | undefined, formData: FormD
 export async function logout() {
     await signOut({redirectTo:"/dashboard/login"});
 }
+export async function deleteUser(userId: number) {
+    await sql`UPDATE users SET valid = false where id = ${userId}`
+    revalidatePath('/dashboard')
+    revalidatePath(`/dashboard/user/${userId}`)
+    revalidatePath(`/dashboard/edit/${userId}`)
+    redirect('/dashboard')
+}

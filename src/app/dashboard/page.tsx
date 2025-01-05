@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { sql } from "../../../node_modules/@vercel/postgres/dist/index.cjs"
 import { QueryResultRow } from "../../../node_modules/@vercel/postgres/dist/index.cjs"
 import Link from "../../../node_modules/next/link.js"
+import {DeleteButton} from './ui/delete'
 
 export default async function Page() {
     const data = await sql`SELECT * FROM users;`
@@ -20,6 +21,8 @@ export default async function Page() {
                             <th>name</th>
                             <th>email</th>
                             <th></th>
+                            <th></th>
+                            <th>valid</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,6 +32,8 @@ export default async function Page() {
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td><Link href={`/dashboard/user/${user.id}`}>詳細</Link></td>
+                            <td><DeleteButton userId={user.id} /></td>
+                            <td>{user.valid == true ? '有効' : '無効'}</td>
                         </tr>
                     ))}
                     </tbody>
