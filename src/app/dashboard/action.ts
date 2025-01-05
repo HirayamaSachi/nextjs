@@ -48,7 +48,6 @@ type EditFormState = {
     id?: number,
     name?: string,
     email?: string,
-    password?: string,
 }
 export async function editUser(prevState: FormState, formData: FormData) {
     const rawFormData : EditFormState = Object.fromEntries(formData);
@@ -56,26 +55,21 @@ export async function editUser(prevState: FormState, formData: FormData) {
     const schema = z.object({
         name: z.string().min(1, "nameの入力は必須です"),
         email: z.string().min(1, "emailの入力は必須です").email("メールアドレスを入力してください"),
-        password: z.string().min(8, "8文字以上で入力してください")
     })
     const result = schema.safeParse({
         name: rawFormData.name,
         email: rawFormData.email,
-        password: rawFormData.password
     })
     if(!result.success) {
         const formatted = result.error.format()
         return {
             name: formatted.name?._errors.join(", "),
             email: formatted.email?._errors.join(", "),
-            password: formatted.password?._errors.join(", "),
         }
     }
     const data = result.data;
     try {
-        const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(data.password, salt)
-        await sql`UPDATE users SET name = ${data.name}, email = ${data.email}, password = ${hash}, salt = ${salt}  WHERE id = ${rawFormData.id}`
+        await sql`UPDATE users SET name = ${data.name}, email = ${data.email} WHERE id = ${rawFormData.id}`
     } catch (e) {
         throw new Error(`Failed to update User: ${e}`);
     }
@@ -86,7 +80,6 @@ export async function editUser(prevState: FormState, formData: FormData) {
     return {
         name: "",
         email: "",
-        password: ""
     }
 
 }

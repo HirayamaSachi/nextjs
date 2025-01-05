@@ -24,11 +24,6 @@ export default function UserForm(props: { user : QueryResultRow}) {
                     <input type="text" name="email" id="email" className='block w-96 p-1 border focus:border-blue-500 border-gray-950' defaultValue={props.user.email} />
                     <p className='text-red-500 text-sm' aria-live='polite'>{state?.email}</p>
                 </div>
-                <div className='p-1'>
-                    <label htmlFor="password" className='block mb-1 text-sm font-medium text-gray-900 dark:text-white'>パスワード</label>
-                    <input type="password" name="password" id="password" className='block w-96 p-1 border focus:border-blue-500 border-gray-950' defaultValue={props.user.password} />
-                    <p className='text-red-500 text-sm' aria-live='polite'>{state?.password}</p>
-                </div>
                 <input type="hidden" name="id" value={props.user.id} />
                 <SubmitButton />
             </form>
