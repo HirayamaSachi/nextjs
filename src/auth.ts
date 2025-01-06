@@ -3,7 +3,6 @@ import { authConfig } from './auth.config'
 import Credentials from 'next-auth/providers/credentials'
 import { sql } from '@vercel/postgres'
 import bcrypt from "bcrypt";
-import { z }from 'zod'
 
 
 async function getUser(email: string) {
@@ -11,24 +10,18 @@ async function getUser(email: string) {
     return data.rows[0]
 }
 
-const User = {
-    email: String,
-    password: String,
-}
 
 export const { auth, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [
         Credentials({
-            async authorize(credentials) {
-                const parsedCredentials = z.object({ email: z.string(), password: z.string().min(6) }).safeParse(credentials)
-                if (parsedCredentials.success) {
-                    const { email, password } = parsedCredentials.data
-                    const user = await getUser(email)
-                    if (!user) return null
-                    const passwordMatch = await bcrypt.compareSync(password, user.password)
-                    if (passwordMatch) return user
-                }
+            async authorize(credentials: Partial<Record<"email" | "password" | "callbackUrl", string>>) {
+                if(!credentials.email || !credentials.password) return null
+                console.log(JSON.stringify(credentials))
+                const user = await getUser(credentials.email)
+                if (!user) return null
+                const passwordMatch = await bcrypt.compareSync(credentials.password, user.password)
+                if (passwordMatch) return user
                 return null
             }
         })]

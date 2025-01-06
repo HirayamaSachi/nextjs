@@ -2,8 +2,12 @@
 
 import { useFormState, useFormStatus } from "react-dom"
 import {authenticate} from '../action'
+const initialState = {
+    email: "",
+    password: ""
+}
 export default function LoginForm() {
-    const [state, formAction] = useFormState(authenticate, undefined)
+    const [state, formAction] = useFormState(authenticate, initialState)
     const {pending} = useFormStatus()
     return (
         <div className='p-10'>
@@ -12,12 +16,12 @@ export default function LoginForm() {
                 <div className='p-1'>
                     <label htmlFor="email" className='block mb-1 text-sm font-medium text-gray-900 dark:text-white'>メールアドレス</label>
                     <input type="text" name="email" id="email" className='block w-96 p-1 border focus:border-blue-500 border-gray-950' />
-                    <p className='text-red-500 text-sm' aria-live='polite'></p>
+                    <p className='text-red-500 text-sm' aria-live='polite'>{state?.email}</p>
                 </div>
                 <div className='p-1'>
                     <label htmlFor="password" className='block mb-1 text-sm font-medium text-gray-900 dark:text-white'>パスワード</label>
                     <input type="text" name="password" id="password" className='block w-96 p-1 border focus:border-blue-500 border-gray-950' />
-                    <p className='text-red-500 text-sm' aria-live='polite'></p>
+                    <p className='text-red-500 text-sm' aria-live='polite'>{state?.password}</p>
                 </div>
                 <button aria-disabled={pending}>
                     Log In

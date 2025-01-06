@@ -11,6 +11,7 @@ export type FormState = {
     password?: string,
 }
 import { signOut } from "@/auth";
+import { format } from 'path'
 
 export async function createUser(prevState: FormState, formData: FormData) {
     const schema = z.object({
@@ -49,7 +50,7 @@ type EditFormState = {
     name?: string,
     email?: string,
 }
-export async function editUser(prevState: FormState, formData: FormData) {
+export async function editUser(prevState: EditFormState, formData: FormData) {
     const rawFormData : EditFormState = Object.fromEntries(formData);
     
     const schema = z.object({
@@ -84,9 +85,36 @@ export async function editUser(prevState: FormState, formData: FormData) {
 
 }
 
-export async function authenticate(_prevState: void | undefined, formData: FormData)
+type CreateFormState = {
+    email?: string,
+    password?: string
+}
+
+export async function authenticate(_prevState: CreateFormState, formData: FormData)
 {
-    await signIn('credentials', {email:formData.get('email'), password: formData.get('password'), callbackUrl: "/dashboard"})
+    const result = z.object({
+        email: z.string().min(6, "emailの入力は必須です"),
+        password: z.string().min(6, "passwordの入力は必須です") 
+    }).safeParse({email: formData.get('email'), password: formData.get('password')})
+    if(!result.success) {
+        const formatted = result.error.format()
+        return {
+            email: formatted.email?._errors.join(", "),
+            password: formatted.password?._errors.join(", ")
+        }
+    }
+    try {
+        await signIn('credentials', {email:formData.get('email'), password: formData.get('password'), callbackUrl: "/dashboard"})
+    } catch (error) {
+        return {
+            email: "メールアドレスかパスワードが正しくありません",
+            password: ""
+        }
+    }
+    return {
+        email: "",
+        password: ""
+    }
 }
 
 export async function logout() {
