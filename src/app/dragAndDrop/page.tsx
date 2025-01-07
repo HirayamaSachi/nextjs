@@ -1,8 +1,8 @@
 "use client";
 
 import { DndContext, DragEndEvent, UniqueIdentifier } from '@dnd-kit/core';
-import { Droppable } from './ui/droppable';
-import { Draggable } from './ui/draggable';
+import Droppable from './ui/droppable';
+import Draggable from './ui/draggable';
 import { useState } from 'react';
 
 
@@ -21,11 +21,11 @@ export default function Page() {
     return (
         <DndContext onDragEnd={handleDragEnd}>
             <div className='flex flex-col justify-center items-center w-screen h-screen gap-8'>
-        // ドラッグするアイテム
+            {/** ドラッグするアイテム */ }
                 <div className='flex h-20'>
                     {parent === null ? draggableMarkup : null}
                 </div>
-        // ドロップするコンテナ３個横並び
+                {/** ドラッグするアイテム */ }
                 <div className='flex'>
                     {containers.map((id) => (
                         <Droppable key={id} id={id} isOverAddClass="bg-green-700">
