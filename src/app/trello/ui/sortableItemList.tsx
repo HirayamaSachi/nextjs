@@ -1,14 +1,14 @@
 import SortableItem from './sortable';
 import Draggable from './draggable'
-export default function SortableItemList(props: { id: string, color: string, name: string, items: { id: string, name: string }[] }) {
+export default function SortableItemList(props: { id: string, color: string, name: string, items: { id:string, name: string, parentId: string}[] }) {
     return (
-        <div key={props.id} id={props.id} className={`bg-${props.color}-50 p-10`}>
+        <div id={props.id} className={`bg-${props.color}-50`}>
             <h1>{props.name}</h1>
             {
-                Array.from(props.items?.entries()).map(([key, item]) => (
-                    <SortableItem key={key} id={key.toString()}>
+                props.items.map((item) => (
+                    <SortableItem key={item.id} id={item.id}>
                         <div className='m-10'>
-                            <Draggable id={key.toString()}>{item.name}</Draggable>
+                            <Draggable id={item.id}>{item.name}</Draggable>
                         </div>
                     </SortableItem>
                 ))

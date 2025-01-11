@@ -18,7 +18,7 @@ export default function SortableList(props : {items: { id: number; content: stri
         <DndContext onDragEnd={handleDragEnd}>
             <SortableContext items={props.items}>
                 {props.items.map((item) => (
-                    <SortableItem key={item.id} id={item.id} content={item.content} />
+                    <SortableItem id={item.id} content={item.content} />
                 ))}
             </SortableContext>
         </DndContext>

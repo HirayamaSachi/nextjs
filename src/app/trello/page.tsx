@@ -23,14 +23,14 @@ import SortableItemList from './ui/sortableItemList';
 export default function Page() {
 
     const taskMap = new Map()
-    taskMap.set('1', { name: "タスク1", parentId: '3' })
-    taskMap.set('2', { name: "タスク2", parentId: '1' })
-    taskMap.set('3', { name: "タスク3", parentId: '1' })
+    taskMap.set('1', { id: 'task-1', name: "タスク1", parentId: '3' })
+    taskMap.set('2', { id: 'task-2', name: "タスク2", parentId: '1' })
+    taskMap.set('3', { id: 'task-3', name: "タスク3", parentId: '1' })
 
     const containerMap = new Map()
-    containerMap.set('1', { name: 'todo', color: 'red' })
-    containerMap.set('2', { name: 'process', color: 'yellow' })
-    containerMap.set('3', { name: 'complete', color: 'blue' })
+    containerMap.set('1', { id: 'container-1', name: 'todo', color: 'red' })
+    containerMap.set('2', { id: 'container-2', name: 'process', color: 'yellow' })
+    containerMap.set('3', { id: 'container-3', name: 'complete', color: 'blue' })
 
     const listMap = new Map()
     containerMap.forEach((container, c_key) => {
@@ -56,17 +56,18 @@ export default function Page() {
         })
     )
     const handleDragEnd = (event: DragEndEvent) => {
-        // todo:更新周りの処理
         const { active, over } = event
-        if (over) {
-            const activeTask = tasks.get(active.id)
+        if (over.id === undefined || over.id.includes('container')) {
+            const originalTaskId = active.id?.replace('task-', '')
+            const activeTask = tasks.get(originalTaskId)
             if (activeTask == undefined) return
 
             // 別の要素に移動させた場合更新
-            if (activeTask.parentId !== over.id) {
+            const updateContainerId = over.id.replace('container-', '')
+            if (activeTask.parentId !== updateContainerId) {
                 const updateTasks = new Map(tasks)
                 const updateLists = new Map()
-                updateTasks.set(active.id, { ...activeTask, parentId: over.id })
+                updateTasks.set(originalTaskId, { ...activeTask, parentId: updateContainerId })
                 setTasks(updateTasks)
                 containers.forEach((container, c_key) => {
                     const tasksByContainer = new Map()
@@ -84,15 +85,16 @@ export default function Page() {
             }
         }
         // todo:arrayMove
+        arrayMove()
     }
     return (
-        <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter}>
-            {Array.from(lists.entries()).map(([key, list]) => (
-                <Droppable id={key} key={key}>
-                    <SortableContext items={Array.from(list.items.values())} strategy={verticalListSortingStrategy}>
-                        <SortableItemList id={key} items={list.items} color={list.color} name={list.name}></SortableItemList>
-                    </SortableContext>
-                </Droppable>
+        <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter} id="list-id">
+            {Array.from(lists.values()).map((list) => (
+                <SortableContext key={list.id} items={Array.from(list.items?.values())} strategy={verticalListSortingStrategy}>
+                    <Droppable id={list.id}>
+                        <SortableItemList id={list.id} items={Array.from(list.items?.values())} color={list.color} name={list.name}></SortableItemList>
+                    </Droppable>
+                </SortableContext>
             ))}
         </DndContext>
     )
