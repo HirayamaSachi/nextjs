@@ -56,6 +56,7 @@ export default function Page() {
         })
     )
     const handleDragEnd = (event: DragEndEvent) => {
+        // todo:更新周りの処理
         const { active, over } = event
         if (over) {
             const activeTask = tasks.get(active.id)
