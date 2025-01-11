@@ -57,13 +57,14 @@ export default function Page() {
     )
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
-        if (over.id === undefined || over.id.includes('container')) {
-            const originalTaskId = active.id?.replace('task-', '')
+        if(over?.id === undefined ) return 
+        if (over.id?.toString().includes('container')) {
+            const originalTaskId = active.id?.toString().replace('task-', '')
             const activeTask = tasks.get(originalTaskId)
             if (activeTask == undefined) return
 
             // 別の要素に移動させた場合更新
-            const updateContainerId = over.id.replace('container-', '')
+            const updateContainerId = over.id?.toString().replace('container-', '')
             if (activeTask.parentId !== updateContainerId) {
                 const updateTasks = new Map(tasks)
                 const updateLists = new Map()
@@ -85,7 +86,6 @@ export default function Page() {
             }
         }
         // todo:arrayMove
-        arrayMove()
     }
     return (
         <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter} id="list-id">
