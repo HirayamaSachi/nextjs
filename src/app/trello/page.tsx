@@ -84,6 +84,23 @@ export default function Page() {
                 })
                 setLists(updateLists)
             }
+        } else if(over.id?.toString().includes('task')) {
+            const originalTaskId = active?.id.toString().replace('task-', '')
+            const activeTask = tasks.get(originalTaskId)
+
+            const updateLists = new Map(lists)
+            const originalContainer = updateLists.get(activeTask.parentId)
+            const originalItemsInContainer:{id: string, name: string, parentId: string}[] = originalContainer.items
+            const oldIndex = Array.from(originalItemsInContainer.values()).findIndex((item) => item.id === active?.id)
+            const newIndex = Array.from(originalItemsInContainer.values()).findIndex((item) => item.id === over?.id)
+            const updateItemsInContainer:{id: string, name: string, parentId: string}[] = arrayMove(Array.from(originalItemsInContainer.values()), oldIndex, newIndex)
+            const updateTasks = new Map()
+            Array.from(updateItemsInContainer).forEach((item) => {
+                if(item.id == undefined) return
+                updateTasks.set(item.id.toString().replace('task-', ''), item)
+            })
+            updateLists.set(activeTask.parentId, {...originalContainer, items: updateTasks})
+            setLists(updateLists)
         }
         // todo:arrayMove
     }
