@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import {
     DndContext,
     DragEndEvent,
+    DragOverEvent,
     closestCenter,
     KeyboardSensor,
     PointerSensor,
@@ -64,13 +65,12 @@ export default function Page() {
             if (activeTask == undefined) return
 
             // 別の要素に移動させた場合更新
-            const updateContainerId = over.id?.toString().replace('container-', '')
-            if (activeTask.parentId !== updateContainerId) {
+            if (activeTask.parentId !== over.id) {
                 const updateTasks = new Map(tasks)
                 const updateLists = new Map()
-                updateTasks.set(originalTaskId, { ...activeTask, parentId: updateContainerId })
+                updateTasks.set(originalTaskId, { ...activeTask, parentId: over.id?.toString().replace('container-', '') })
                 setTasks(updateTasks)
-                containers.forEach((container, c_key) => {
+                lists.forEach((container, c_key) => {
                     const tasksByContainer = new Map()
                     updateTasks.forEach((task, t_key) => {
                         if (task.parentId == c_key) {
@@ -84,12 +84,13 @@ export default function Page() {
                 })
                 setLists(updateLists)
             }
-        } else if(over.id?.toString().includes('task')) {
+        }
+        if(over.id?.toString().includes('task')) {
             const originalTaskId = active?.id.toString().replace('task-', '')
             const activeTask = tasks.get(originalTaskId)
 
             const updateLists = new Map(lists)
-            const originalContainer = updateLists.get(activeTask.parentId)
+            const originalContainer = updateLists.get(activeTask.parentId.replace('container-', ''))
             const originalItemsInContainer:{id: string, name: string, parentId: string}[] = originalContainer.items
             const oldIndex = Array.from(originalItemsInContainer.values()).findIndex((item) => item.id === active?.id)
             const newIndex = Array.from(originalItemsInContainer.values()).findIndex((item) => item.id === over?.id)
@@ -99,16 +100,56 @@ export default function Page() {
                 if(item.id == undefined) return
                 updateTasks.set(item.id.toString().replace('task-', ''), item)
             })
-            updateLists.set(activeTask.parentId, {...originalContainer, items: updateTasks})
+            updateLists.set(activeTask.parentId.replace('container-', ''), {...originalContainer, items: updateTasks})
             setLists(updateLists)
         }
-        // todo:arrayMove
+    }
+
+    const handleDragOver = (event:DragOverEvent) => {
+        const {active, over} = event
+        if(over === undefined) return
+        const from = active?.data?.current?.sortable
+        const to = over?.data?.current?.sortable
+        if(to === undefined || from.containerId === to.containerId) return
+        // 別要素への移動
+        const updateTasks = new Map(tasks)
+        const originalTask = tasks.get(active.id.toString().replace('task-', ''))
+        updateTasks.set(active.id.toString().replace('task-', ''), {...originalTask, parentId: to.containerId.toString().replace('container-', '')})
+        setTasks(updateTasks)
+        const updateLists = new Map(lists)
+
+        lists.forEach((container, c_key) => {
+            const tasksByContainer = new Map()
+            updateTasks.forEach((task, t_key) => {
+                if (task.parentId == c_key) {
+                    tasksByContainer.set(t_key, task)
+                }
+            })
+            updateLists.set(c_key, {
+                ...container,
+                items: tasksByContainer
+            })
+        })
+
+        // 順序変更
+        const toContainer = updateLists.get(to.containerId.toString().replace('container-', ''))
+        const toItems :{id: string, name: string, parentId: string}[]= toContainer.items
+        const updateItemsInContainer = new Map()
+        Array.from(toItems.values()).forEach((item,i) => {
+            if(i === to.index) {
+                const fromTask = tasks.get(active.id.toString().replace('task-', ''))
+                updateItemsInContainer.set(fromTask.id.toString().replace('task-', ''), fromTask)
+            }
+            updateItemsInContainer.set(item.id.toString().replace('task-', ''), item)
+        })
+        updateLists.set(to.containerId.toString().replace('container-', ''), {...toContainer, items: updateItemsInContainer})
+        setLists(updateLists)
     }
     return (
         <div className='flex flex-row m-32 gap-2'>
-            <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter} id="list-id">
+            <DndContext onDragEnd={handleDragEnd} onDragOver={handleDragOver} sensors={sensors} collisionDetection={closestCenter} id="list-id">
                 {Array.from(lists.values()).map((list) => (
-                    <SortableContext key={list.id} items={Array.from(list.items?.values())} strategy={verticalListSortingStrategy}>
+                    <SortableContext key={list.id} id={list.id} items={Array.from(list.items?.values())} strategy={verticalListSortingStrategy}>
                         <Droppable id={list.id}>
                             <SortableItemList id={list.id} items={Array.from(list.items?.values())} color={list.color} name={list.name}></SortableItemList>
                         </Droppable>
