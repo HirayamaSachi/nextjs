@@ -105,14 +105,16 @@ export default function Page() {
         // todo:arrayMove
     }
     return (
-        <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter} id="list-id">
-            {Array.from(lists.values()).map((list) => (
-                <SortableContext key={list.id} items={Array.from(list.items?.values())} strategy={verticalListSortingStrategy}>
-                    <Droppable id={list.id}>
-                        <SortableItemList id={list.id} items={Array.from(list.items?.values())} color={list.color} name={list.name}></SortableItemList>
-                    </Droppable>
-                </SortableContext>
-            ))}
-        </DndContext>
+        <div className='flex flex-row m-32 gap-2'>
+            <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter} id="list-id">
+                {Array.from(lists.values()).map((list) => (
+                    <SortableContext key={list.id} items={Array.from(list.items?.values())} strategy={verticalListSortingStrategy}>
+                        <Droppable id={list.id}>
+                            <SortableItemList id={list.id} items={Array.from(list.items?.values())} color={list.color} name={list.name}></SortableItemList>
+                        </Droppable>
+                    </SortableContext>
+                ))}
+            </DndContext>
+        </div>
     )
 }
